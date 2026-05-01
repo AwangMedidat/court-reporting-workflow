@@ -82,3 +82,32 @@ yarn dev
 cd backend
 yarn install
 ```
+
+---
+
+## Sample Output
+
+### Request Job
+```bash
+{
+  "caseName": "State vs John Doe",
+  "duration": 120,
+  "location": "physical",
+  "city": "Jakarta"
+}
+```
+
+### Response Job
+```bash
+{
+    "id": "3f145e8c-204d-4d90-9c97-d31b99c9abfe",
+    "caseName": "State vs John Doe",
+    "duration": 120,
+    "location": "physical",
+    "city": "Jakarta",
+    "status": "NEW",
+    "reporterId": null,
+    "editorId": null,
+    "createdAt": "2026-05-01T11:31:15.684Z"
+}
+```
