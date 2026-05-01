@@ -46,5 +46,39 @@ A fullstack workflow management system for handling court transcription jobs, in
 
 ### 1. Clone Project
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/AwangMedidat/court-reporting-workflow.git
 cd court-reporting-workflow
+```
+
+### 2. Backend Setup
+```bash
+cd backend
+yarn install
+```
+
+### Create .env
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/court_workflow"
+PORT=8000
+```
+
+### Run Migration
+```bash
+yarn prisma migrate dev --name init
+```
+
+### Run Seeder
+```bash
+yarn prisma db seed
+```
+
+### Start Backend
+```bash
+yarn dev
+```
+
+### 3. Frontend Setup
+```bash
+cd backend
+yarn install
+```
