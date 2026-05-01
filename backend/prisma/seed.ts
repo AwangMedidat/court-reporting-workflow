@@ -2,56 +2,76 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+const reporterCities = ['Jakarta', 'Bandung', 'Surabaya', 'Medan', 'Bali', 'Yogyakarta', 'Semarang', 'Makassar', 'Palembang', 'Remote']
+
+async function createUniqueReporter(baseLocation: string) {
+  const existingCount = await prisma.reporter.count({
+    where: {
+      location: baseLocation,
+    },
+  })
+
+  const reporterName =
+    existingCount === 0
+      ? `Reporter ${baseLocation}`
+      : `Reporter ${baseLocation} ${existingCount + 1}`
+
+  await prisma.reporter.create({
+    data: {
+      name: reporterName,
+      location: baseLocation,
+      availability: true,
+    },
+  })
+
+  console.log(`Added ${reporterName}`)
+}
+
+async function createUniqueEditor() {
+  const existingCount = await prisma.editor.count()
+
+  let editorName = ''
+
+  if (existingCount === 0) {
+    editorName = 'Editor A'
+  } else if (existingCount === 1) {
+    editorName = 'Editor B'
+  } else if (existingCount === 2) {
+    editorName = 'Senior Editor'
+  } else {
+    editorName = `Editor ${existingCount + 1}`
+  }
+
+  await prisma.editor.create({
+    data: {
+      name: editorName,
+      availability: true,
+    },
+  })
+
+  console.log(`Added ${editorName}`)
+}
+
+async function seedReporters(total: number = 100) {
+  for (let i = 0; i < total; i++) {
+    const city = reporterCities[i % reporterCities.length]
+    await createUniqueReporter(city)
+  }
+}
+
+async function seedEditors(total: number = 100) {
+  for (let i = 0; i < total; i++) {
+    await createUniqueEditor()
+  }
+}
+
 async function main() {
-  console.log('Seeding reporters...')
+  console.log('Starting large-scale dynamic seed...')
 
-  await prisma.reporter.createMany({
-    data: [
-      {
-        name: 'Reporter Jakarta',
-        location: 'Jakarta',
-        availability: true,
-      },
-      {
-        name: 'Reporter Bandung',
-        location: 'Bandung',
-        availability: true,
-      },
-      {
-        name: 'Reporter Surabaya',
-        location: 'Surabaya',
-        availability: true,
-      },
-      {
-        name: 'Remote Reporter',
-        location: 'Remote',
-        availability: true,
-      },
-    ],
-    skipDuplicates: true,
-  })
+  await seedReporters(100)
+  await seedEditors(100)
 
-  console.log('Seeding editors...')
-
-  await prisma.editor.createMany({
-    data: [
-      {
-        name: 'Editor A',
-        availability: true,
-      },
-      {
-        name: 'Editor B',
-        availability: true,
-      },
-      {
-        name: 'Senior Editor',
-        availability: true,
-      },
-    ],
-    skipDuplicates: true,
-  })
-
-  console.log('Seed completed successfully.')
+  console.log('100 reporters and 100 editors seeded successfully.')
 }
 
 main()
