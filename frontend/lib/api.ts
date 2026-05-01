@@ -1,3 +1,5 @@
+import { PayloadCreateJobs } from "./interfaces/job.interfaces"
+
 const BASE_URL = 'http://localhost:8000/api'
 
 export const getJobs = async () => {
@@ -14,7 +16,7 @@ export const getJobPayment = async (id: string) => {
   return res.json()
 }
 
-export const createJob = async (payload: any) => {
+export const createJob = async (payload: PayloadCreateJobs) => {
   const res = await fetch(`${BASE_URL}/jobs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
